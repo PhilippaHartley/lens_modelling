@@ -99,13 +99,13 @@ def draw_caus (s,ag,filt=2.0,blc=[0,0],trc=[0,0],gpix=128):
   #  plt.show()
  #   plt.contour(scipy.ndimage.gaussian_filter(mag[blc[1]:trc[1],blc[0]:trc[0]],\
      #             filt),levels=[0.0],colors='black')
-    print mag.shape
+    print (mag.shape)
     copymag = np.copy(mag)
     zoomfac = 3
   #  copymag = scipy.ndimage.zoom(copymag, zoomfac) 
-    print mag.shape
+    print (mag.shape)
     caus = 0.0*mag
-    print caus.shape
+    print (caus.shape)
     
     for iy in range(gpix):
         for ix in range(gpix):
@@ -120,7 +120,7 @@ def draw_caus (s,ag,filt=2.0,blc=[0,0],trc=[0,0],gpix=128):
 #    fig, ax = plt.subplots(subplot_kw={'aspect': 'equal'})
     trc[0]*=zoomfac
     trc[1]*=zoomfac
-    print trc, blc
+    print( trc, blc)
     magmag = 1/np.abs(mag)
     np.putmask(magmag, magmag>10000, 10000)
   #  magmag = np.log10(magmag)

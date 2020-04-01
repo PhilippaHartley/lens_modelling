@@ -26,7 +26,7 @@ def addarray (a, apos, b, bpos, ismult=False):
     b1 = ndimage.shift(b,frac[::-1])
     c = np.copy(a)
     if any(dceil)<0.0 or dfloor[0]>a.shape[1] or dfloor[1]>a.shape[0]:
-        print 'Warning: PSF found outside image', dfloor, '->', dceil
+        print ('Warning: PSF found outside image', dfloor, '->', dceil)
         return c
     while dceil[0]>a.shape[1]:
         dceil[0]-=1.0
@@ -144,7 +144,7 @@ def first_download (ra,dec,outfile='',gif=0,fits=1,imsize=2.0,\
     ra=ra.split()
     dec=dec.split()
     command = ('wget -O %s "http://%s/cgi-bin/firstimage?RA=%s%%20%s%%20%s%%20%s%%20%s%%20%s&Dec=&Equinox=J2000&ImageSize=%.1f&MaxInt=10&GIF=%d&FITS=%d&Download=1"'%(outfile,imserver,ra[0],ra[1],ra[2],dec[0],dec[1],dec[2],imsize,gif,fits))
-    print command
+    print (command)
     os.system(command)
     
     
@@ -188,7 +188,7 @@ def fitgauss (infile,gu=np.array([]),o=[],docrt=0,dotv=1,ngauss=1,tiewidth=0):
             temp = measurements.maximum_position (aa)
             cur=np.vstack((cur,[temp[1],temp[0]]))
     if docrt > -1:
-        print cur
+        print (cur)
         
 # ----------------------------------------------------------------
     fluxes = np.zeros_like(cur[:,0])
@@ -213,7 +213,7 @@ def fitgauss (infile,gu=np.array([]),o=[],docrt=0,dotv=1,ngauss=1,tiewidth=0):
                 pass
 
     if docrt > -1:
-        print 'Initial guesses:',g
+        print ('Initial guesses:',g)
 
     if o==[]:
         o=[0,0]
@@ -235,13 +235,13 @@ def fitgauss (infile,gu=np.array([]),o=[],docrt=0,dotv=1,ngauss=1,tiewidth=0):
         m = m+mkgauss(a.shape[::-1], (g[i][0],g[i][1]), g[i][2], g[i][3])
 
     if (docrt>0):
-        print xopt, ((a-m)*(a-m)).sum(), (a-m).max(),(a-m).min()
+        print (xopt, ((a-m)*(a-m)).sum(), (a-m).max(),(a-m).min())
         plt.subplot(221);plt.imshow(a);plt.colorbar()
         plt.subplot(222);plt.imshow(m);plt.colorbar()
         plt.subplot(223);plt.imshow(a-m);plt.colorbar();plt.show()
 # ----------------------------------------------------------------
     if docrt > -1:
-        print 'Final array:',g
+        print ('Final array:',g)
     return xopt, g
 
 def fg_func (x0, *x):
@@ -316,7 +316,7 @@ def jiggle (im1, im2, docrt=0):
     xopt = fmin (jiggle_func, x0, args=x, disp=0)
     shiftim = xopt[2]*ndimage.shift (im2, (xopt[0],xopt[1]))
     if (docrt):
-        print 'Optimal jiggle', xopt[0],xopt[1],xopt[2],jiggle_func(xopt,*x)
+        print ('Optimal jiggle', xopt[0],xopt[1],xopt[2],jiggle_func(xopt,*x))
     return shiftim
 
 def jiggle_func (x0, *x):
@@ -383,7 +383,7 @@ def maxfit_func(x0, *x):
             iy = float(j)-x0[7]
             expect[3*j+i] = x0[0]+x0[1]*ix+x0[2]*iy+x0[3]*ix*iy+x0[4]*ix*ix+x0[5]*iy*iy
             goodness = goodness+(expect[3*j+i]-x[3*j+i])*(expect[3*j+i]-x[3*j+i])
-    print x0,goodness
+    print (x0,goodness)
     return goodness
 
 def mkdecon (posa,posb):
@@ -475,7 +475,7 @@ def npolyfit_func (x0, *x):
         for j in range(1+x[0]):
             expected+=x0[j]*dx[i]**float(j)
         chisq+=(dy[i]-expected)**2.0/(derr[i]**2.0)
-    print x0, chisq/float(len(dx)-len(x0))
+    print (x0, chisq/float(len(dx)-len(x0)))
     return chisq/float(len(dx)-len(x0))
 
 # compensates for the baffling lack of a polynomial fitting routine in
@@ -507,14 +507,14 @@ def nstack(a,b):
         if len(a)==len(b):
             return np.vstack((a,b))
         else:
-            print 'Dimensions inconsistent'
+            print ('Dimensions inconsistent')
             return []
     if a.ndim==2 and b.ndim==1:
         return np.vstack((a,b))
     if a.ndim==1 and b.ndim==2:
         return np.vstack((b,a))
     if a.shape[-2]!=b.shape[-2] or a.shape[-1]!=b.shape[-1]:
-        print 'Dimensions inconsistent'
+        print ('Dimensions inconsistent')
         return []
     c=np.append(np.ravel(a),np.ravel(b))
     extradim=len(c)/(a.shape[-1]*a.shape[-2])
@@ -526,7 +526,7 @@ def pcurs():
     binding_id = plt.connect('motion_notify_event', on_move)
     plt.connect('button_press_event', on_click)
     if "test_disconnect" in sys.argv:
-        print "disconnecting console coordinate printout..."
+        print ("disconnecting console coordinate printout...")
         plt.disconnect(binding_id)
     plt.show()
     try:
@@ -538,8 +538,8 @@ def printmx(m):
     
     for i in range(m.shape[0]):
         for j in range(m.shape[1]):
-            print m[i,j],' '
-        print '\n'
+            print(m[i,j],' ')
+        print('\n')
 
 
 def on_move(event):
@@ -641,7 +641,7 @@ def ast_register(infile,outfile,inext=0,outext=0,incoord=[]):
                 break
             except:
                 pass
-    print 'Read in=%s[%d], out=%s[%d]' % (infile,inext,outfile,outext)
+    print ('Read in=%s[%d], out=%s[%d]' % (infile,inext,outfile,outext))
     indata = inpoint[inext].data
     while indata.ndim>2:
         indata=indata[0]

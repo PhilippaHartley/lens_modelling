@@ -5,14 +5,14 @@ Created on Fri Feb  2 11:30:13 2018
 
 @author: phartley
 """
-import numpy as np, scipy as sp,os,sys,matplotlib,pgetu,emcee,pyfits,warnings
+import numpy as np, scipy as sp,os,sys,matplotlib,pgetu,warnings
 
 from scipy import ndimage,optimize; from scipy.optimize import fmin, basinhopping
 from scipy.optimize import fmin_l_bfgs_b as lbfgs
 from scipy.optimize import fmin_bfgs as bfgs
 from scipy.optimize import fmin_powell as powl
 import time, pickle, njj, matplotlib.pyplot as plt
-from pyfits import getdata,getheader
+from astropy.io.fits import getdata,getheader
 from matplotlib import gridspec
 from numpy import random
 from numpy import log, exp, pi
@@ -127,7 +127,7 @@ def extract (a_stack, comps,x0, lin,ospar,ogpar):
     if not last_retval == None:
         if retval < last_retval:
             last_retval = np.copy(retval)    
-            print 'retval', retval
+            print ('retval', retval)
             print( 'plotting')
             plt.yticks([])
             plt.savefig(new_plotname)
@@ -391,9 +391,9 @@ def pelim(infile,doopt,spar,sopt,gpar,gopt,gpix, psfpar,\
         args=(spar,sopt,gpar,gopt,gpix, psfpar,crval,cdelt,crpix,\
                       b,False,noise,False, comps, lin)
         n_params = len(parameters)
-        print 'n_params:', n_params
+        print ('n_params:', n_params)
         datafile = 'out/1115'
-        print parameters
+        print (parameters)
         # run MultiNest
         pymultinest.run(loglike, prior, n_params, outputfiles_basename=datafile + '_1_', resume = False, verbose = True)
         json.dump(parameters.tolist(), open(datafile + '_1_params.json', 'w')) # save parameter names
@@ -439,8 +439,8 @@ if __name__ == "__main__":
     if load_params == 1:
         sparload = np.load('ospar.npy')
         gparload = np.load('ogpar.npy')
-        print 'spar: ', sparload
-        print 'gpar: ', gparload
+        print ('spar: ', sparload)
+        print ('gpar: ', gparload)
         spar1 = sparload
         gpar1 = gparload
     else:
@@ -463,20 +463,20 @@ if __name__ == "__main__":
     
               
     if len(gopt) != 7:
-        print 'wrong number of lens booleans!'
+        print ('wrong number of lens booleans!')
         sys.exit()
     if len(sopt)!= 6 and len(sopt) !=12:
-        print 'wrong number of source booleans!'
+        print ('wrong number of source booleans!')
         sys.exit()              
-    infile='crop4.fits'; gpix=41; doopt=1
+    infile='co_bimage'; gpix=41; doopt=1
     noise=5e-10; spsiz=128; bbar=10
     
     gpar = [gpar] if gpar.ndim==1 else gpar
     spar = [spar] if spar.ndim==1 else spar
     
     if len(np.ravel(sopt)) != len(np.ravel(spar)):
-        print 'len(sopt) != len(spar):', len(sopt) ,len(spar) 
-        print 'wrong number of source components in par.log!'
+        print ('len(sopt) != len(spar):', len(sopt) ,len(spar) )
+        print ('wrong number of source components in par.log!')
         sys.exit()
         
     # This is a list of coordidates of point components
